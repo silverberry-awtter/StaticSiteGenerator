@@ -1,25 +1,22 @@
-#print("hello world")
-
-#from textnode import TextNode, TextType
+import sys
 from copystatic import sync_static_to_public
-from generate_page import generate_page, generate_pages_recursive
+from generate_page import generate_pages_recursive
 
 def main():
-    # Creating a new TextNode object with the requested dummy values
-#    node = TextNode(
-#        "This is some anchor text",
-#        TextType.LINK,
-#        "https://www.boot.dev"
-#    )
+    # Default base path is standard root "/"
+    basepath = "/"
 
-    # Printing the object to verify the __repr__ format
-#    print(node)
+    # If a command-line argument is provided, capture it as the basepath
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
 
+    print(f"Building site with active base path: '{basepath}'")
+
+    # 1. Clear out public/ and duplicate assets
     sync_static_to_public()
 
-#    generate_page("content/index.md", "template.html", "public/index.html")
-    generate_pages_recursive("content", "template.html", "public")
+    # 2. Walk layout structures and bake templates with the custom base path
+    generate_pages_recursive("content", "template.html", "public", basepath)
 
-# This ensures main() only runs if main.py is executed directly
 if __name__ == "__main__":
     main()
