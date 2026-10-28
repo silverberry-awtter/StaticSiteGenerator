@@ -3,20 +3,18 @@ from copystatic import sync_static_to_public
 from generate_page import generate_pages_recursive
 
 def main():
-    # Default base path is standard root "/"
     basepath = "/"
 
-    # If a command-line argument is provided, capture it as the basepath
     if len(sys.argv) > 1:
         basepath = sys.argv[1]
 
     print(f"Building site with active base path: '{basepath}'")
 
-    # 1. Clear out public/ and duplicate assets
-    sync_static_to_public()
+    # 1. Clear out docs/ and duplicate assets (We change this from sync_static_to_public)
+    sync_static_to_public("static", "docs")
 
-    # 2. Walk layout structures and bake templates with the custom base path
-    generate_pages_recursive("content", "template.html", "public", basepath)
+    # 2. Compile templates directly into the docs/ folder
+    generate_pages_recursive("content", "template.html", "docs", basepath)
 
 if __name__ == "__main__":
     main()
